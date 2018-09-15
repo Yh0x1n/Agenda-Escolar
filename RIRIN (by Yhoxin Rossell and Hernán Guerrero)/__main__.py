@@ -27,19 +27,11 @@ def random_quote():
     """ This function create a new windows 
     with a random quote.
     """
-
-    #TO-DO: Buscar una forma de hacer que 
-    # el proceso sea asincrono.
-
-    msg = 'searching...'
-
     win = Tk()
     win.geometry("300x150")
     win.title ("Motivation for you")
-    text = Label(win, text = msg, wraplength=300)
+    text = Label(win, text='searching...', wraplength=300)
     text.pack()
-
-    #win.bind('<<pop>>', print_event)
 
     def search_quote():
         msg = core.get_random_quote()
@@ -60,7 +52,6 @@ def motivation():
     Motiv_window.title ("Motivation for you")
     label2 = Label(Motiv_window, text = msg)
     label2.pack()   
-
 
 def diary():
     Diary_window = Tk()
