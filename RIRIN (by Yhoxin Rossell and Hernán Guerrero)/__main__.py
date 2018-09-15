@@ -1,6 +1,10 @@
 #RIRIN
 #By Yhoxin Rossell and Hernán Guerrero, 2022.
 
+from threading import Thread
+import queue
+from time import sleep
+
 from tkinter import *
 from tkinter import messagebox
 import random
@@ -10,6 +14,10 @@ from io import open
 import core
 
 route = ''
+EXIT = False
+DESTROYED = False
+EVENT_Q = queue.Queue()
+
 #Nota del creador
 def note():
     Note_window = Tk()
@@ -27,13 +35,24 @@ def random_quote():
     # el proceso sea asincrono.
 
     msg = 'searching...'
-    msg = core.get_random_quote()
 
     win = Tk()
     win.geometry("300x150")
     win.title ("Motivation for you")
     text = Label(win, text = msg, wraplength=300)
     text.pack()
+
+    #win.bind('<<pop>>', print_event)
+
+    def search_quote():
+        msg = core.get_random_quote()
+
+        def update():
+            text['text'] = msg
+
+        EVENT_Q.put(lambda: update())
+
+    Thread(target=search_quote).start()
 
 #Función para mostrar frases motivacionales
 def motivation():
@@ -149,9 +168,8 @@ def diary():
 
 #Salir del programa
 def exit():
-    choice = messagebox.askyesno("Exit", "Exit program?")
-    if choice == True:
-        root.quit() 
+    global EXIT
+    EXIT = messagebox.askyesno("Exit", "Exit program?")
 
 #Bloque principal; menú y botones
 root = Tk()  
@@ -176,4 +194,24 @@ btn4.place(x = 400, y = 150, width = 100, height = 50)
 btn5 = Button(root, text='Random Quote', command=random_quote)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
 
-root.mainloop()
+def destroy_handler(e):
+    """Turn a flag that indicate if the 
+    root windows was destroyed"""
+    global DESTROYED
+    DESTROYED = True
+
+root.bind('<Destroy>', destroy_handler)
+
+while True:
+
+    while not EVENT_Q.empty():
+        f = EVENT_Q.get()
+        f()
+    
+    if DESTROYED: break
+    
+    if EXIT:
+        root.destroy()
+        break
+
+    root.update()
