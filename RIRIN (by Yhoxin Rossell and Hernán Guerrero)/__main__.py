@@ -180,15 +180,15 @@ def destroy_handler(e):
 
 root.bind('<Destroy>', destroy_handler)
 
-while True:
-    while not EVENT_Q.empty():
-        f = EVENT_Q.get()
-        f()
-    
+while True:    
     if DESTROYED: break
     
     if EXIT:
         root.destroy()
         break
+
+    while not EVENT_Q.empty():
+        f = EVENT_Q.get()
+        f()
 
     root.update()
