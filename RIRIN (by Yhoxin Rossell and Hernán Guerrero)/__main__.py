@@ -3,13 +3,10 @@
 
 from threading import Thread
 import queue
-from time import sleep
 
 from tkinter import *
 from tkinter import messagebox
-import random
 from tkinter import filedialog as FileDialog
-from io import open
 
 import core
 
@@ -56,22 +53,12 @@ def random_quote():
 
 #Función para mostrar frases motivacionales
 def motivation():
-    phrases = ["Keep it up! You're almost there!",
-    "You are great, you are beautiful,\nyou are everything that's fine.",
-    "Love yourself.",
-    "You're an angel.",
-    "You make everyone blind\nbecause you're shining bright.",
-    "We dream with the day you'll be turning\ninto a succesful person.",
-    "Look at the sky before you go to sleep...\nYou see? We're under the same sky as you,\neven though the time is different.",
-    "You're never alone.",
-    "My shoulder is yours if you need to cry.\nJust let it out. It's okay.~",
-    "Be yourself, speak yourself",
-    "If you can imagine it, you can make it true.\nThe only limit is your mind.",
-    "Don't let anyone make you believe\nthat you can't do something."]
+    msg = core.get_motivation_phrase()
+
     Motiv_window = Tk()
     Motiv_window.geometry("300x150")
     Motiv_window.title ("Motivation for you")
-    label2 = Label(Motiv_window, text = random.choice(phrases))
+    label2 = Label(Motiv_window, text = msg)
     label2.pack()   
 
 
@@ -203,7 +190,6 @@ def destroy_handler(e):
 root.bind('<Destroy>', destroy_handler)
 
 while True:
-
     while not EVENT_Q.empty():
         f = EVENT_Q.get()
         f()
