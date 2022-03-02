@@ -19,6 +19,10 @@ def note():
     label2.pack()
 
 def random_quote():
+    """ This function create a new windows 
+    with a random quote.
+    """
+
     #TO-DO: Buscar una forma de hacer que 
     # el proceso sea asincrono.
 
