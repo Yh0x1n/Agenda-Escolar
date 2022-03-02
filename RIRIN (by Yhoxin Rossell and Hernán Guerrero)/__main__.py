@@ -7,6 +7,8 @@ import random
 from tkinter import filedialog as FileDialog
 from io import open
 
+import core
+
 route = ''
 #Nota del creador
 def note():
@@ -15,6 +17,19 @@ def note():
     Note_window.title ("Creator note")
     label2 = Label(Note_window, text = "This is a simple program, exclusively created for people that are getting through a hard time.\nWe hope you can use this program everytime you don't feel okay.\nWe will always be there for you. <3 \n-Y & H")
     label2.pack()
+
+def random_quote():
+    #TO-DO: Buscar una forma de hacer que 
+    # el proceso sea asincrono.
+
+    msg = 'searching...'
+    msg = core.get_random_quote()
+
+    win = Tk()
+    win.geometry("300x150")
+    win.title ("Motivation for you")
+    text = Label(win, text = msg, wraplength=300)
+    text.pack()
 
 #Función para mostrar frases motivacionales
 def motivation():
@@ -153,5 +168,8 @@ btn3.place(x = 400, y = 300, width = 100, height = 50)
 
 btn4 = Button(root, text = "Diary", fg = "white", bg = "purple", command = diary)
 btn4.place(x = 400, y = 150, width = 100, height = 50)
+
+btn5 = Button(root, text='Random Quote', command=random_quote)
+btn5.place(x = 250, y = 150, width = 100, height = 50)
 
 root.mainloop()
