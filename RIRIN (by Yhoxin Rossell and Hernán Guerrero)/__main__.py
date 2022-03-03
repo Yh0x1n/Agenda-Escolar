@@ -13,6 +13,9 @@ import core
 route = ''
 EXIT = False
 DESTROYED = False
+
+# A communication channel between 
+# main thread and subthreads
 EVENT_Q = queue.Queue()
 
 #Nota del creador
@@ -33,6 +36,8 @@ def random_quote():
     text = Label(win, text='searching...', wraplength=300)
     text.pack()
 
+    # A function to be executed 
+    # concurrently in another thread.
     def search_quote():
         msg = core.get_random_quote()
 
@@ -41,6 +46,8 @@ def random_quote():
 
         EVENT_Q.put(lambda: update())
 
+    # pass the above function to
+    # be excecuted concurrently
     Thread(target=search_quote).start()
 
 #Función para mostrar frases motivacionales
@@ -180,15 +187,24 @@ def destroy_handler(e):
 
 root.bind('<Destroy>', destroy_handler)
 
+# this while loop is to take manual update of UI.
 while True:    
+    # If DESTROYED flag are True,
+    # the loop break excecution.
     if DESTROYED: break
     
+    # If only EXIT is True, 
+    # manualy destroy the windows
+    # and break excecution.
     if EXIT:
         root.destroy()
         break
 
+    # Review the communication channel 
+    # and execute the functions into it.
     while not EVENT_Q.empty():
         f = EVENT_Q.get()
         f()
 
+    # update the windos.
     root.update()
