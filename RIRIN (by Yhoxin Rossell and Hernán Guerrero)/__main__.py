@@ -12,8 +12,6 @@ from tkinter import filedialog as FileDialog
 import core
 
 route = ''
-EXIT = False
-DESTROYED = False
 
 # A communication channel between 
 # main thread and subthreads
@@ -154,8 +152,10 @@ def diary():
 
 #Salir del programa
 def exit():
-    global EXIT
-    EXIT = messagebox.askyesno("Exit", "Exit program?")
+    choice = messagebox.askyesno("Exit", "Exit program?")
+
+    if choice == True:
+        root.quit()
 
 
 #Bloque principal; menú y botones
@@ -182,38 +182,21 @@ btn4.place(x = 400, y = 150, width = 100, height = 50)
 btn5 = ttk.Button(root, text='Random Quote', command=random_quote)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
 
-def destroy_handler(e):
-    """Turn a flag that indicate if the 
-    root windows was destroyed"""
-    global DESTROYED
-    DESTROYED = True
-
 def keypress_handler(e):
     # Is press ESC key, call exit funciton.
     if e.keycode == 27:
         exit()
 
-root.bind('<Destroy>', destroy_handler)
 root.bind('<KeyPress>', keypress_handler)
 
-# this while loop is to take manual update of UI.
-while True:    
-    # If DESTROYED flag are True,
-    # the loop break excecution.
-    if DESTROYED: break
-    
-    # If only EXIT is True, 
-    # manualy destroy the windows
-    # and break excecution.
-    if EXIT:
-        root.destroy()
-        break
-
+def update():
     # Review the communication channel 
     # and execute the functions into it.
     while not EVENT_Q.empty():
         f = EVENT_Q.get()
         f()    
 
-    # update the windos.
-    root.update()
+    root.after(100, update)
+
+root.after(500, update)
+root.mainloop()
