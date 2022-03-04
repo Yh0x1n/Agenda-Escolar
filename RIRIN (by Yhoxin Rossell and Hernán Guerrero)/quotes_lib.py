@@ -33,14 +33,12 @@ def get_random_quote():
   return quote, author
 
 def get_50_quotes():
-  """Function that return a tuple of
-  quote and author strings from zenquotes API.
-    [
-      {
-        "q": "the quote...",
-        "a": "the author."
-      }
-    ]
+  """Function that return an array of 
+  50 dictionaries like:
+    {
+      "q": "the quote...",
+      "a": "the author."
+    }
   """
   quotes = []
 
