@@ -5,6 +5,7 @@ from threading import Thread
 import queue
 
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog as FileDialog
 
@@ -156,6 +157,7 @@ def exit():
     global EXIT
     EXIT = messagebox.askyesno("Exit", "Exit program?")
 
+
 #Bloque principal; menú y botones
 root = Tk()  
 root.geometry("600x400")
@@ -176,7 +178,8 @@ btn3.place(x = 400, y = 300, width = 100, height = 50)
 btn4 = Button(root, text = "Diary", fg = "white", bg = "purple", command = diary)
 btn4.place(x = 400, y = 150, width = 100, height = 50)
 
-btn5 = Button(root, text='Random Quote', command=random_quote)
+# Use ttk for a more modern style
+btn5 = ttk.Button(root, text='Random Quote', command=random_quote)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
 
 def destroy_handler(e):
@@ -185,7 +188,13 @@ def destroy_handler(e):
     global DESTROYED
     DESTROYED = True
 
+def keypress_handler(e):
+    # Is press ESC key, call exit funciton.
+    if e.keycode == 27:
+        exit()
+
 root.bind('<Destroy>', destroy_handler)
+root.bind('<KeyPress>', keypress_handler)
 
 # this while loop is to take manual update of UI.
 while True:    
@@ -204,7 +213,7 @@ while True:
     # and execute the functions into it.
     while not EVENT_Q.empty():
         f = EVENT_Q.get()
-        f()
+        f()    
 
     # update the windos.
     root.update()
