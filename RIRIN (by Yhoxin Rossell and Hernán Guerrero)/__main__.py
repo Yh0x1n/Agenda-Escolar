@@ -152,9 +152,9 @@ def diary():
 
 #Salir del programa
 def exit():
-    choice = messagebox.askyesno("Exit", "Exit program?")
-
-    if choice == True:
+    exit = messagebox.askyesno("Exit", "Exit program?")
+    
+    if exit: 
         root.quit()
 
 
@@ -189,6 +189,7 @@ def keypress_handler(e):
 
 root.bind('<KeyPress>', keypress_handler)
 
+UPDATE_RATE = 100
 def update():
     # Review the communication channel 
     # and execute the functions into it.
@@ -196,7 +197,7 @@ def update():
         f = EVENT_Q.get()
         f()    
 
-    root.after(100, update)
+    root.after(UPDATE_RATE, update)
 
-root.after(500, update)
+root.after(UPDATE_RATE, update)
 root.mainloop()
