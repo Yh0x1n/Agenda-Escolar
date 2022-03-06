@@ -1,5 +1,6 @@
 #RIRIN
 #By Yhoxin Rossell and Hernán Guerrero, 2022.
+#Contributor: Douglas Socorro -> github: Douglas571
 
 from threading import Thread
 import queue
