@@ -126,7 +126,6 @@ def diary():
     filemenu.add_command(label = "Open", command = abrir)
     filemenu.add_command(label = "Save", command = guardar)
     filemenu.add_command(label = "Save File As...", command = guardar_como)
-    filemenu.add_command(label = "Close")
     filemenu.add_separator()
     filemenu.add_command(label = "Exit", command = Diary_window.quit)
 
