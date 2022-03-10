@@ -50,6 +50,38 @@ def random_quote():
     # be excecuted concurrently
     Thread(target=search_quote).start()
 
+def quotes_table():
+    """Create a new window for manage saved quotes"""
+    win = Tk()
+    win.geometry("300x150")
+    win.title ("Quotes")
+    win.grid()
+    author_lb = Label(win, text='Author')
+    content_lb = Label(win, text='Quote')
+    year_lb = Label(win, text='Year')
+
+    author_etr = ttk.Entry(win, width=150)
+    content_txt = Text(win)
+    
+    # Diary_text.pack(fill = 'both', expand = 1)
+    # Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
+
+
+    def new_quote():
+        quote = entry.get()
+        print(quote)
+
+    btn = ttk.Button(win, text='New', command=new_quote)
+    author_lb.grid(column=0, row=0)
+    author_etr.grid(column=1, row=0)
+
+    content_lb.grid(column=0, row=1)
+    
+    # content_txt.grid(column=1, row=1)
+
+
+    text.pack()
+
 #Función para mostrar frases motivacionales
 def motivation():
     msg = core.get_motivation_phrase()
@@ -182,6 +214,9 @@ btn4.place(x = 400, y = 150, width = 100, height = 50)
 # Use ttk for a more modern style
 btn5 = ttk.Button(root, text='Random Quote', command=random_quote)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
+
+btn6 = ttk.Button(root, text='Quotes', command=quotes_table)
+btn6.place(x=100, y=225, width=100, height=50)
 
 def keypress_handler(e):
     # Is press ESC key, call exit funciton.
