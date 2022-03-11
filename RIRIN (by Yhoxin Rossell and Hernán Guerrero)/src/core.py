@@ -3,9 +3,8 @@ import pathlib
 from pathlib import Path
 from collections import namedtuple
 import random
-import quotes_lib
-
 import sqlite3
+import quotes_lib
 
 def get_random_quote():
   msg = ''
@@ -99,11 +98,11 @@ class QuotesDB:
       query += 'where '
       for k in filters.keys():
         query += f'{k}=:{k} '
-
+  
     with self.con as c:
-      cursor = c.execute(query, filters)()
+      cur = c.execute(query, filters)
       res = {
-        'count': cursor.rowcount
+        'count': cur.rowcount
       }
 
     return res

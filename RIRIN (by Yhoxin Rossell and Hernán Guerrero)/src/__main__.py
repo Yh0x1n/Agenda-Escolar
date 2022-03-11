@@ -53,34 +53,34 @@ def random_quote():
 def quotes_table():
     """Create a new window for manage saved quotes"""
     win = Tk()
-    win.geometry("300x150")
+    win.geometry("500x600")
     win.title ("Quotes")
     win.grid()
+    # win.columnconfigure(0, weight=1)
+    # win.columnconfigure(1, weight=1)
+    # win.rowconfigure(0, weight=1)
+    # win.rowconfigure(1, weight=1)
+
     author_lb = Label(win, text='Author')
-    content_lb = Label(win, text='Quote')
-    year_lb = Label(win, text='Year')
-
-    author_etr = ttk.Entry(win, width=150)
-    content_txt = Text(win)
+    author_etr = ttk.Entry(win, width=30)
     
-    # Diary_text.pack(fill = 'both', expand = 1)
-    # Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
+    # year_lb = Label(win, text='Year')
 
+    content_lb = Label(win, text='Quote')
+    content_txt = Text(win, height=3, width=22)
 
-    def new_quote():
-        quote = entry.get()
+    def new_quote(etr):
+        quote = etr.get()
         print(quote)
 
-    btn = ttk.Button(win, text='New', command=new_quote)
+    btn = ttk.Button(win, text='New', command=lambda: new_quote(content_txt))
     author_lb.grid(column=0, row=0)
-    author_etr.grid(column=1, row=0)
+    author_etr.grid(column=1, row=0, columnspan=2)
 
     content_lb.grid(column=0, row=1)
-    
-    # content_txt.grid(column=1, row=1)
+    content_txt.grid(column=1, row=1, rowspan=2, columnspan=2)
 
-
-    text.pack()
+    btn.grid(column=2, row=3, padx=10, pady=10)
 
 #Función para mostrar frases motivacionales
 def motivation():
