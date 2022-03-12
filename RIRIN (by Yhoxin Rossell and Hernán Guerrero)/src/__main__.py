@@ -4,12 +4,10 @@
 
 from threading import Thread
 import queue
-
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog as FileDialog
-
 import core
 
 route = ''
@@ -33,7 +31,10 @@ def random_quote():
     win = Tk()
     win.geometry("300x150")
     win.title ("Motivation for you")
-    text = Label(win, text='searching...', wraplength=300)
+    btn = Button(win, text = "Search again", width = 100, length = 50, command = search_quote)
+    btn.pack(side = 'bottom')
+    
+    text = Label(win, text = 'searching...', wraplength = 300)
     text.pack()
 
     # A function to be executed 
@@ -53,7 +54,7 @@ def random_quote():
 def quotes_table():
     """Create a new window for manage saved quotes"""
     win = Tk()
-    win.geometry("500x600")
+    win.geometry("400x300")
     win.title ("Quotes")
     win.grid()
     # win.columnconfigure(0, weight=1)
@@ -61,24 +62,24 @@ def quotes_table():
     # win.rowconfigure(0, weight=1)
     # win.rowconfigure(1, weight=1)
 
-    author_lb = Label(win, text='Author')
-    author_etr = ttk.Entry(win, width=30)
+    author_lb = Label(win, text = 'Author')
+    author_etr = ttk.Entry(win, width = 30)
     
     # year_lb = Label(win, text='Year')
 
-    content_lb = Label(win, text='Quote')
-    content_txt = Text(win, height=3, width=22)
+    content_lb = Label(win, text = 'Quote')
+    content_txt = Text(win, height = 3, width = 22)
 
     def new_quote(etr):
         quote = etr.get()
         print(quote)
 
-    btn = ttk.Button(win, text='New', command=lambda: new_quote(content_txt))
-    author_lb.grid(column=0, row=0)
-    author_etr.grid(column=1, row=0, columnspan=2)
+    btn = ttk.Button(win, text = 'New', command = lambda: new_quote(content_txt))
+    author_lb.grid(column = 0, row = 0)
+    author_etr.grid(column = 1, row = 0, columnspan = 2)
 
-    content_lb.grid(column=0, row=1)
-    content_txt.grid(column=1, row=1, rowspan=2, columnspan=2)
+    content_lb.grid(column = 0, row = 1)
+    content_txt.grid(column = 1, row = 1, rowspan = 2, columnspan = 2)
 
     btn.grid(column=2, row=3, padx=10, pady=10)
 
@@ -151,31 +152,27 @@ def diary():
     
      # Opciones del menú de Editar   
     def close_diary():
-        if guardar == True:
+        choice = messagebox.askyesnocancel("Exit, Exit diary?\nIf you haven't saved your file, you might lose your progress.")
+        if choice == True:
+            guardar()
             Diary_window.quit()
-        
-        elif guardar == False:
-            choice = messagebox.askyesnocancel("Exit, Exit diary?\nIf you haven't saved your file, you might lose your progress.")
-            if choice == True:
-                guardar()
-                Diary_window.quit()
-            elif choice == False:
-                Diary_window.quit()         
+        elif choice == False:
+            Diary_window.quit()         
             
     def copiar():
-        Diary_text.event_generate("<<Copy>>")
+        Diary_text.event_generate('<<Copy>>')
     
     def cortar():
-        Diary_text.event_generate("<<Cut>>")
+        Diary_text.event_generate('<<Cut>>')
     
     def pegar():
-        Diary_text.event_generate("<<Paste>>")
+        Diary_text.event_generate('<<Paste>>')
     
     def deshacer():
-        Diary_text.event_generate("<<Undo>>")
+        Diary_text.event_generate('<<Undo>>')
 
     def rehacer():
-        Diary_text.event_generate("<<Redo>>")
+        Diary_text.event_generate('<<Redo>>')
     ##############################
 
     menubar = Menu(Diary_window)
@@ -193,11 +190,11 @@ def diary():
 
     editmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Edit", menu = editmenu)
-    editmenu.add_command(label = "Cut", command = cortar)
-    editmenu.add_command(label = "Copy", command = copiar)
-    editmenu.add_command(label = "Paste", command = pegar)
-    editmenu.add_command(label = "Undo", command = deshacer)
-    editmenu.add_command(label = "Redo", command = rehacer)
+    editmenu.add_command(label = "Cut    Ctrl + X", command = cortar)
+    editmenu.add_command(label = "Copy   Ctrl + C", command = copiar)
+    editmenu.add_command(label = "Paste  Ctrl + V", command = pegar)
+    editmenu.add_command(label = "Undo   Ctrl + Z", command = deshacer)
+    editmenu.add_command(label = "Redo   Ctrl + Y", command = rehacer)
 
     helpmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Help", menu = helpmenu)
@@ -220,7 +217,6 @@ def exit():
     
     if exit: 
         root.quit()
-
 
 #Bloque principal; menú y botones
 root = Tk()  

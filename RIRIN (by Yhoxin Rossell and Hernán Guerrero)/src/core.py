@@ -13,7 +13,10 @@ def get_random_quote():
     msg = f'"{quote}"\n\nby {author}'
   except Exception as e:
     print(e)
-    msg = "There's and connection error, try again."
+    msg = "There's and connection error, but we have some quotes you can read offline!"
+    
+    if e:
+      msg = get_motivation_phrase()    
 
   return msg
 
