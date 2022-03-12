@@ -1,10 +1,9 @@
-#RIRIN
-#By Yhoxin Rossell and Hernán Guerrero, 2022.
-#Contributor: Douglas Socorro -> github: Douglas571
+# RIRIN: An app for motivation
+# By Yhoxin Rossell and Hernán Guerrero, 2022.
+# Contributor: Douglas Socorro -> github: Douglas571
 
 from threading import Thread
 import queue
-
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -18,7 +17,7 @@ route = ''
 # main thread and subthreads
 EVENT_Q = queue.Queue()
 
-#Nota del creador
+# Nota del creador
 def note():
     Note_window = Tk()
     Note_window.geometry("500x125")
@@ -50,7 +49,7 @@ def random_quote():
     # be excecuted concurrently
     Thread(target=search_quote).start()
 
-#Función para mostrar frases motivacionales
+# Función para mostrar frases motivacionales
 def motivation():
     msg = core.get_motivation_phrase()
 
@@ -60,11 +59,13 @@ def motivation():
     label2 = Label(Motiv_window, text = msg)
     label2.pack()   
 
+# Diario
 def diary():
     Diary_window = Tk()
     Diary_window.geometry("800x600")
     Diary_window.title("My Diary")
     
+    # Opciones del menú de Archivo
     def nuevo():
         global route
         message.set("Nuevo file")
@@ -116,10 +117,42 @@ def diary():
         else:
             message.set("Operation cancelled")
             route = ""
+    #############################
+    
+    # Opciones del menú de Editar   
+    def close_diary():
+        if guardar == True:
+            Diary_window.quit()
+        
+        elif guardar == False:
+            choice = messagebox.askyesnocancel("Exit, Exit diary?\nIf you haven't saved your file, you might lose your progress.")
+            if choice == True:
+                guardar()
+                Diary_window.quit()
+            elif choice == False:
+                Diary_window.quit()         
+            
+    def copiar():
+        Diary_text.event_generate("<<Copy>>")
+    
+    def cortar():
+        Diary_text.event_generate("<<Cut>>")
+    
+    def pegar():
+        Diary_text.event_generate("<<Paste>>")
+    
+    def deshacer():
+        Diary_text.event_generate("<<Undo>>")
 
+    def rehacer():
+        Diary_text.event_generate("<<Redo>>")
+    ##############################
+    
+# Barra de submenús    
     menubar = Menu(Diary_window)
     Diary_window.config(menu = menubar)
 
+    # Menú de Archivo
     filemenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "File", menu = filemenu)
     filemenu.add_command(label = "New", command = nuevo)
@@ -127,19 +160,24 @@ def diary():
     filemenu.add_command(label = "Save", command = guardar)
     filemenu.add_command(label = "Save File As...", command = guardar_como)
     filemenu.add_separator()
-    filemenu.add_command(label = "Exit", command = Diary_window.quit)
+    filemenu.add_command(label = "Exit", command = close_diary)
 
+    # Menú de Editar
     editmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Edit", menu = editmenu)
-    editmenu.add_command(label = "Cut") #Comandos aún no configurados
-    editmenu.add_command(label = "Copy")
-    editmenu.add_command(label = "Paste")
+    editmenu.add_command(label = "Cut", command = cortar)
+    editmenu.add_command(label = "Copy", command = copiar)
+    editmenu.add_command(label = "Paste", command = pegar)
+    editmenu.add_command(label = "Undo", command = deshacer)
+    editmenu.add_command(label = "Redo", command = rehacer)
 
+    # Menú de Ayuda
     helpmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Help", menu = helpmenu)
-    helpmenu.add_command(label = "About...")
+    helpmenu.add_command(label = "About...", command = note)
+################
 
-    # Caja de texto central
+# Caja de texto central
     Diary_text = Text(Diary_window)
     Diary_text.pack(fill = 'both', expand = 1)
     Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
@@ -149,23 +187,24 @@ def diary():
     message.set("Tell us how you feel ^^")
     monitor = Label(Diary_window, textvar = message, justify = 'left')
     monitor.pack(side = "left")
+####################
 
-#Salir del programa
+# Salir del programa
 def exit():
     choice = messagebox.askyesno("Exit", "Exit program?")
 
     if choice == True:
         root.quit()
+################
 
-
-#Bloque principal; menú y botones
+# Bloque principal; menú y botones
 root = Tk()  
 root.geometry("600x400")
 root.title("RIRIN: An app for motivation")
 label = Label(root, text = "WELCOME!!!\nWe hope you feel good today~")
 label.place(x = 200, y = 50, width = 200, height = 50)
 
-#Botones del menú
+# Botones del menú
 btn = Button(root, text = "Read creator note", fg = "black", bg = "white", command = note)
 btn.place(x = 100, y = 300, width = 100, height = 50)
 
@@ -178,16 +217,18 @@ btn3.place(x = 400, y = 300, width = 100, height = 50)
 btn4 = Button(root, text = "Diary", fg = "white", bg = "purple", command = diary)
 btn4.place(x = 400, y = 150, width = 100, height = 50)
 
-# Use ttk for a more modern style
+# Usa ttk para una mejor interfaz
 btn5 = ttk.Button(root, text='Random Quote', command=random_quote)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
 
+# Función para llamar a exit() si presionas la tecla Esc.
 def keypress_handler(e):
-    # Is press ESC key, call exit funciton.
+    
     if e.keycode == 27:
         exit()
-
+        
 root.bind('<KeyPress>', keypress_handler)
+##########################
 
 def update():
     # Review the communication channel 
