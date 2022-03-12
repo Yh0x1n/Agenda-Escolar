@@ -197,7 +197,7 @@ def diary():
     editmenu.add_command(label = "Copy", command = copiar)
     editmenu.add_command(label = "Paste", command = pegar)
     editmenu.add_command(label = "Undo", command = deshacer)
-    editmenu.add_command(label = "Paste", command = rehacer)
+    editmenu.add_command(label = "Redo", command = rehacer)
 
     helpmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Help", menu = helpmenu)
