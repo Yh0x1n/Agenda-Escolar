@@ -148,6 +148,35 @@ def diary():
         else:
             message.set("Operation cancelled")
             route = ""
+    
+     # Opciones del menú de Editar   
+    def close_diary():
+        if guardar == True:
+            Diary_window.quit()
+        
+        elif guardar == False:
+            choice = messagebox.askyesnocancel("Exit, Exit diary?\nIf you haven't saved your file, you might lose your progress.")
+            if choice == True:
+                guardar()
+                Diary_window.quit()
+            elif choice == False:
+                Diary_window.quit()         
+            
+    def copiar():
+        Diary_text.event_generate("<<Copy>>")
+    
+    def cortar():
+        Diary_text.event_generate("<<Cut>>")
+    
+    def pegar():
+        Diary_text.event_generate("<<Paste>>")
+    
+    def deshacer():
+        Diary_text.event_generate("<<Undo>>")
+
+    def rehacer():
+        Diary_text.event_generate("<<Redo>>")
+    ##############################
 
     menubar = Menu(Diary_window)
     Diary_window.config(menu = menubar)
@@ -160,13 +189,15 @@ def diary():
     filemenu.add_command(label = "Save File As...", command = guardar_como)
     filemenu.add_command(label = "Close")
     filemenu.add_separator()
-    filemenu.add_command(label = "Exit", command = Diary_window.quit)
+    filemenu.add_command(label = "Exit", command = close_diary)
 
     editmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Edit", menu = editmenu)
-    editmenu.add_command(label = "Cut") #Comandos aún no configurados
-    editmenu.add_command(label = "Copy")
-    editmenu.add_command(label = "Paste")
+    editmenu.add_command(label = "Cut", command = cortar)
+    editmenu.add_command(label = "Copy", command = copiar)
+    editmenu.add_command(label = "Paste", command = pegar)
+    editmenu.add_command(label = "Undo", command = deshacer)
+    editmenu.add_command(label = "Paste", command = rehacer)
 
     helpmenu = Menu(menubar, tearoff = 0)
     menubar.add_cascade(label = "Help", menu = helpmenu)
