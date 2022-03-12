@@ -44,11 +44,6 @@ def random_quote():
 
         EVENT_Q.put(lambda: update())
     
-        btn = Button(win, text = "Search again", command = search_quote)
-        btn.pack(side = 'left', width = 100, height = 50)
-
-        btn2 = Button(win, text = "Read quote offline", command = core.get_random_quote)
-        btn2.pack(side = 'right', width = 100, height = 50)
     # pass the above function to
     # be excecuted concurrently
     Thread(target = search_quote).start()
