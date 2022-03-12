@@ -2,17 +2,17 @@ from urllib import request
 import json
 
 def get_random_quote():
-  """Function that return a tuple of
+  """Function that returns a tuple of
   quote and author strings from zenquotes API.
   """
   quote, author = '', ''
 
   # make requires
-  req = request.Request(url='https://zenquotes.io/api/random')
+  req = request.Request(url = 'https://zenquotes.io/api/random')
 
   # send request
   print('waiting for response...')
-  with request.urlopen(req, timeout=10) as res:
+  with request.urlopen(req, timeout = 10) as res:
     print('conection open!')
     # wait until the data resived is fully readed,
     # and decode with utf-8.
@@ -33,7 +33,7 @@ def get_random_quote():
   return quote, author
 
 def get_50_quotes():
-  """Function that return an array of 
+  """Function that returns an array of 
   50 dictionaries like:
     {
       "q": "the quote...",
@@ -42,7 +42,7 @@ def get_50_quotes():
   """
   quotes = []
 
-  req = request.Request(url='https://zenquotes.io/api/quotes')
+  req = request.Request(url = 'https://zenquotes.io/api/quotes')
   with request.urlopen(req) as res:
     raw_data = res.read().decode('utf-8')
     quotes = json.loads(raw_data)

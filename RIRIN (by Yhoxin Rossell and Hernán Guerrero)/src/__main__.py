@@ -31,9 +31,6 @@ def random_quote():
     win = Tk()
     win.geometry("300x250")
     win.title ("Motivation for you")
-    
-    btn.pack(side = 'bottom')
-    
     text = Label(win, text = 'searching...', wraplength = 300)
     text.pack()
 
@@ -49,6 +46,9 @@ def random_quote():
     
     btn = Button(win, text = "Search again", width = 100, length = 50, command = search_quote)
     btn.pack(side = 'left')
+    
+    btn2 = Button(win, text = "Get quote offline", width = 120, length = 50, command = core.get_motivation_phrase)
+    btn2.pack(side = 'right')
     # pass the above function to
     # be excecuted concurrently
     Thread(target = search_quote).start()
