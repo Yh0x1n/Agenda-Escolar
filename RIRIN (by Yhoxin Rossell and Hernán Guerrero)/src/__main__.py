@@ -29,9 +29,9 @@ def random_quote():
     with a random quote.
     """
     win = Tk()
-    win.geometry("300x150")
+    win.geometry("300x250")
     win.title ("Motivation for you")
-    btn = Button(win, text = "Search again", width = 100, length = 50, command = search_quote)
+    
     btn.pack(side = 'bottom')
     
     text = Label(win, text = 'searching...', wraplength = 300)
@@ -46,10 +46,12 @@ def random_quote():
             text['text'] = msg
 
         EVENT_Q.put(lambda: update())
-
+    
+    btn = Button(win, text = "Search again", width = 100, length = 50, command = search_quote)
+    btn.pack(side = 'left')
     # pass the above function to
     # be excecuted concurrently
-    Thread(target=search_quote).start()
+    Thread(target = search_quote).start()
 
 def quotes_table():
     """Create a new window for manage saved quotes"""
