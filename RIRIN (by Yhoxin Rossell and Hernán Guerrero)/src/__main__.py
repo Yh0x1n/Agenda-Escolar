@@ -23,6 +23,16 @@ def note():
     Note_window.title ("Creator note")
     label2 = Label(Note_window, text = "This is a simple program, exclusively created for people that are getting through a hard time.\nWe hope you can use this program everytime you don't feel okay.\nWe will always be there for you. <3 \n-Y & H")
     label2.pack()
+    
+#Función para mostrar frases motivacionales
+def motivation():
+    msg = core.get_motivation_phrase()
+
+    Motiv_window = Tk()
+    Motiv_window.geometry("300x150")
+    Motiv_window.title ("Motivation for you")
+    label2 = Label(Motiv_window, text = msg)
+    label2.pack()   
 
 def random_quote():
     """ This function create a new windows 
@@ -44,11 +54,12 @@ def random_quote():
 
         EVENT_Q.put(lambda: update())
     
-        btn = Button(win, text = "Search again", command = search_quote)
-        btn.pack(side = 'left', width = 100, height = 50)
-
-        btn2 = Button(win, text = "Read quote offline", command = core.get_random_quote)
-        btn2.pack(side = 'right', width = 100, height = 50)
+    btn_search_again = ttk.Button(win, text = "Search again", command = search_quote)
+    btn_search_again.place(x = 30, y = 100, width = 100, height = 50)
+    
+    btn_offline = ttk.Button(win, text = "Read quotes offline", command = motivation)
+    btn_offline.place(x = 160, y = 100, width = 125, height = 50)
+        
     # pass the above function to
     # be excecuted concurrently
     Thread(target = search_quote).start()
@@ -84,16 +95,6 @@ def quotes_table():
     content_txt.grid(column = 1, row = 1, rowspan = 2, columnspan = 2)
 
     btn.grid(column=2, row=3, padx=10, pady=10)
-
-#Función para mostrar frases motivacionales
-def motivation():
-    msg = core.get_motivation_phrase()
-
-    Motiv_window = Tk()
-    Motiv_window.geometry("300x150")
-    Motiv_window.title ("Motivation for you")
-    label2 = Label(Motiv_window, text = msg)
-    label2.pack()   
 
 def diary():
     Diary_window = Tk()
@@ -154,7 +155,7 @@ def diary():
     
      # Opciones del menú de Editar   
     def close_diary():
-        choice = messagebox.askyesnocancel("Exit, Exit diary?\nIf you haven't saved your file, you might lose your progress.")
+        choice = messagebox.askyesnocancel("Exit", "Exit diary?\nIf you haven't saved your file, you might lose your progress.\nDo you want to save your file first?")
         if choice == True:
             guardar()
             Diary_window.quit()
@@ -211,7 +212,7 @@ def diary():
     message = StringVar()
     message.set("Tell us how you feel ^^")
     monitor = Label(Diary_window, textvar = message, justify = 'left')
-    monitor.pack(side = "left")
+    monitor.pack(side = 'bottom')
 
 #Salir del programa
 def exit():
@@ -231,7 +232,7 @@ label.place(x = 200, y = 50, width = 200, height = 50)
 btn = Button(root, text = "Read creator note", fg = "black", bg = "white", command = note)
 btn.place(x = 100, y = 300, width = 100, height = 50)
 
-btn2 = Button(root, text = "Show motivation~", fg = "white", bg = "blue", command = motivation)
+btn2 = Button(root, text = "Random quote", fg = "white", bg = "blue", command = random_quote)
 btn2.place(x = 100, y = 150, width = 100, height = 50)
 
 btn3 = Button(root, text = "Exit", fg = "black", bg = "white", command = exit)
@@ -241,11 +242,8 @@ btn4 = Button(root, text = "Diary", fg = "white", bg = "purple", command = diary
 btn4.place(x = 400, y = 150, width = 100, height = 50)
 
 # Use ttk for a more modern style
-btn5 = ttk.Button(root, text='Random Quote', command=random_quote)
+btn5 = ttk.Button(root, text = 'Create quote', command = quotes_table)
 btn5.place(x = 250, y = 150, width = 100, height = 50)
-
-btn6 = ttk.Button(root, text='Quotes', command=quotes_table)
-btn6.place(x=100, y=225, width=100, height=50)
 
 def keypress_handler(e):
     # Is press ESC key, call exit funciton.
