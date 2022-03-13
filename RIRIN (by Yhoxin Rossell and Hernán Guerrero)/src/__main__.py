@@ -22,18 +22,9 @@ def note():
     Note_window.geometry("500x125")
     Note_window.title ("Creator note")
     label2 = Label(Note_window, text = "This is a simple program, exclusively created for people that are getting through a hard time.\nWe hope you can use this program everytime you don't feel okay.\nWe will always be there for you. <3 \n-Y & H")
-    label2.pack()
-    
-#Función para mostrar frases motivacionales
-def motivation():
-    msg = core.get_motivation_phrase()
+    label2.pack() 
 
-    Motiv_window = Tk()
-    Motiv_window.geometry("300x150")
-    Motiv_window.title ("Motivation for you")
-    label2 = Label(Motiv_window, text = msg)
-    label2.pack()   
-
+# Función para mostrar frases motivacionales
 def random_quote():
     """ This function create a new windows 
     with a random quote.
@@ -41,7 +32,7 @@ def random_quote():
     win = Tk()
     win.geometry("300x250")
     win.title ("Motivation for you")
-    text = Label(win, text = 'searching...', wraplength = 300)
+    text = Label(win, text = 'Search a motivational frase online!\nWe also have some you can read offline. ^^', wraplength = 300)
     text.pack()
 
     # A function to be executed 
@@ -54,15 +45,26 @@ def random_quote():
 
         EVENT_Q.put(lambda: update())
     
+    def offline_quote():
+        msg = core.get_motivation_phrase()
+        
+        def update():
+            text['text'] = msg
+        
+        EVENT_Q.put(lambda: update())
+    
     btn_search_again = ttk.Button(win, text = "Search again", command = search_quote)
     btn_search_again.place(x = 30, y = 100, width = 100, height = 50)
     
-    btn_offline = ttk.Button(win, text = "Read quotes offline", command = motivation)
+    btn_offline = ttk.Button(win, text = "Read quotes offline", command = offline_quote)
     btn_offline.place(x = 160, y = 100, width = 125, height = 50)
 
     # pass the above function to
     # be excecuted concurrently
-    Thread(target = search_quote).start()
+    if btn_search_again == True:
+          
+        Thread(target = search_quote).start()
+    
 
 def quotes_table():
     """Create a new window for manage saved quotes"""
