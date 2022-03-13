@@ -38,33 +38,27 @@ def random_quote():
     # A function to be executed 
     # concurrently in another thread.
     def search_quote():
-        msg = core.get_random_quote()
-
-        def update():
+        text['text'] = 'Searching...'
+        def update(msg):
             text['text'] = msg
 
-        EVENT_Q.put(lambda: update())
+        def concurrent_task():
+            msg = core.get_random_quote()
+            EVENT_Q.put(lambda: update(msg))
+        
+        # pass the above function to
+        # be excecuted concurrently
+        Thread(target=concurrent_task).start()
     
     def offline_quote():
         msg = core.get_motivation_phrase()
-        
-        def update():
-            text['text'] = msg
-        
-        EVENT_Q.put(lambda: update())
+        text['text'] = msg
     
-    btn_search_again = ttk.Button(win, text = "Search again", command = search_quote)
+    btn_search_again = ttk.Button(win, text = "Search again", command=search_quote)
     btn_search_again.place(x = 30, y = 100, width = 100, height = 50)
     
-    btn_offline = ttk.Button(win, text = "Read quotes offline", command = offline_quote)
+    btn_offline = ttk.Button(win, text = "Read quotes offline", command=offline_quote)
     btn_offline.place(x = 160, y = 100, width = 125, height = 50)
-
-    # pass the above function to
-    # be excecuted concurrently
-    if btn_search_again == True:
-          
-        Thread(target = search_quote).start()
-    
 
 def quotes_table():
     """Create a new window for manage saved quotes"""
@@ -178,7 +172,6 @@ def diary():
 
     def rehacer():
         Diary_text.event_generate('<<Redo>>')
-    ##############################
 
     menubar = Menu(Diary_window)
     Diary_window.config(menu = menubar)
@@ -206,7 +199,7 @@ def diary():
     helpmenu.add_command(label = "About...")
 
     # Caja de texto central
-    Diary_text = Text(Diary_window)
+    Diary_text = Text(Diary_window, undo = True)
     Diary_text.pack(fill = 'both', expand = 1)
     Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
 
