@@ -59,7 +59,7 @@ def random_quote():
     
     btn_offline = ttk.Button(win, text = "Read quotes offline", command = motivation)
     btn_offline.place(x = 160, y = 100, width = 125, height = 50)
-        
+
     # pass the above function to
     # be excecuted concurrently
     Thread(target = search_quote).start()
