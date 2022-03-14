@@ -168,11 +168,12 @@ def diary():
         Diary_text.event_generate('<<Paste>>')
     
     def deshacer():
-        Diary_text.event_generate('<<Undo>>')
+        # Diary_text.event_generate('<<Undo>>')
+        Diary_text.edit_undo()
 
     def rehacer():
-        Diary_text.event_generate('<<Redo>>')
-    ##############################
+        # Diary_text.event_generate('<<Redo>>')
+        Diary_text.edit_redo()
 
     menubar = Menu(Diary_window)
     Diary_window.config(menu = menubar)
@@ -201,6 +202,7 @@ def diary():
 
     # Caja de texto central
     Diary_text = Text(Diary_window)
+    Diary_text['undo'] = True
     Diary_text.pack(fill = 'both', expand = 1)
     Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
 
