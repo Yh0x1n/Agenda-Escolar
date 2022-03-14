@@ -168,12 +168,10 @@ def diary():
         Diary_text.event_generate('<<Paste>>')
     
     def deshacer():
-        # Diary_text.event_generate('<<Undo>>')
-        Diary_text.edit_undo()
+        Diary_text.event_generate('<<Undo>>')
 
     def rehacer():
-        # Diary_text.event_generate('<<Redo>>')
-        Diary_text.edit_redo()
+        Diary_text.event_generate('<<Redo>>')
 
     menubar = Menu(Diary_window)
     Diary_window.config(menu = menubar)
