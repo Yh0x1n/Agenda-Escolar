@@ -199,8 +199,7 @@ def diary():
     helpmenu.add_command(label = "About...")
 
     # Caja de texto central
-    Diary_text = Text(Diary_window)
-    Diary_text['undo'] = True
+    Diary_text = Text(Diary_window, undo = True)
     Diary_text.pack(fill = 'both', expand = 1)
     Diary_text.config(padx = 6, pady = 4, bd = 0, font = ("Consolas", 12))
 
