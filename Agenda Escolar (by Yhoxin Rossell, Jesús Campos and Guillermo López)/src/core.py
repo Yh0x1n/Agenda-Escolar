@@ -2,7 +2,7 @@
 
 import mariadb
 import sys
-from main import tasks
+'''from main import tasks'''
 
 def DB_conn():
     try:
@@ -21,3 +21,17 @@ def DB_conn():
         sys.exit(1)
 
     #TO-DO: Crear las sentencias SQL y funciones correspondientes a cada campo de la agenda
+    
+    #Crear tabla
+    try:
+        cur.execute('DROP TABLE IF EXISTS MATERIAS;')
+        cur.execute('CREATE TABLE MATERIAS('
+                    'ID INT NOT NULL AUTO_INCREMENT,'
+                    'NOMBRE VARCHAR(100) NOT NULL,'
+                    'MATERIA VARCHAR(100) NOT NULL,'
+                    'PRIMARY KEY (ID));'
+        )
+    except mariadb.Error as e:
+        print(e)
+
+DB_conn()

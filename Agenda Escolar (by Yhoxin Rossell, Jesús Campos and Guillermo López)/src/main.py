@@ -8,7 +8,6 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog as FileDialog
 from tkcalendar import *
-import core
 
 route = ''
 
@@ -17,6 +16,7 @@ route = ''
 Ventana de gestión de tareas
 '''
 def tasks():
+
     Tasks_window = Tk()
     Tasks_window.geometry("800x600")
     Tasks_window.title("TAREAS")
