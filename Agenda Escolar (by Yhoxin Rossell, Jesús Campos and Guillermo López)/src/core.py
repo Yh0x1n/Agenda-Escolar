@@ -2,6 +2,7 @@
 
 import mariadb
 import sys
+from main import tasks
 
 def DB_conn():
     try:
@@ -18,4 +19,5 @@ def DB_conn():
     except mariadb.Error as e:
         print(f'[!] Error connecting to database!:\n{e}')
         sys.exit(1)
-    
+
+    #TO-DO: Crear las sentencias SQL y funciones correspondientes a cada campo de la agenda
