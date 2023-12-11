@@ -2,8 +2,10 @@
 
 import mariadb
 import sys
+import os
 '''from main import tasks'''
-
+os.system('sudo su')
+os.system('Yh0x4l1n1*')
 def DB_conn():
     try:
         conn = mariadb.connect(
@@ -25,13 +27,43 @@ def DB_conn():
     #Crear tabla
     try:
         cur.execute('DROP TABLE IF EXISTS MATERIAS;')
-        cur.execute('CREATE TABLE MATERIAS('
-                    'ID INT NOT NULL AUTO_INCREMENT,'
-                    'NOMBRE VARCHAR(100) NOT NULL,'
-                    'MATERIA VARCHAR(100) NOT NULL,'
-                    'PRIMARY KEY (ID));'
+        cur.execute(
+                    'CREATE TABLE Materias ('
+                    'id INT PRIMARY KEY AUTO_INCREMENT,'
+                    'nombre VARCHAR(100) NOT NULL,'
+                    'profesor VARCHAR(100),'
+                    'aula VARCHAR(50)'
+                    ');'
         )
+        
+        cur.execute(
+                'CREATE TABLE Tareas ('
+                'id INT PRIMARY KEY AUTO_INCREMENT,'
+                'nombre VARCHAR(100) NOT NULL,'
+                'descripcion TEXT,'
+                'fecha_entrega DATE,'
+                'completada BOOLEAN,'
+                'materia_id INT,'
+                'FOREIGN KEY (materia_id) REFERENCES Materias(id)'
+                ');'
+        )
+
+        cur.execute(
+                    'CREATE TABLE Horarios ('
+                    'id INT PRIMARY KEY AUTO_INCREMENT,'
+                    'dia_semana ENUM("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"),'
+                    'hora TIME,'
+                    'materia_id INT,'
+                    'FOREIGN KEY (materia_id) REFERENCES Materias(id)'
+                    ');'
+        )
+
+        cur.execute(
+            'INSERT INTO Materias(nombre, profesor, aula) values'
+            "('Auditoría de Sistemas', 'Yocceline Rosillo', 'B2'),"
+            "('Defensa Integral VIII', 'Rubén Toyo', B2),"
+            "('Higiene y Seguridad Industrial', 'Robert González', 'B2')"
+        )
+
     except mariadb.Error as e:
         print(e)
-
-DB_conn()
