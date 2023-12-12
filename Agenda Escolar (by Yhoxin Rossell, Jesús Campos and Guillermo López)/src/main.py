@@ -12,6 +12,7 @@ from tkcalendar import *
 from datetime import *
 import mariadb
 import sys
+
 route = ''
 
 '''
@@ -92,10 +93,19 @@ except mariadb.Error as e:
 ##############################################################################################################
 
 '''
-Ventana de gestión de tareas
+Funciones y ventana de gestión de tareas
 '''
 
-def tasks():
+#Función que crea la ventana de agregar tarea
+def v_tareas():
+
+    #Mensaje de éxito en caso de que se guarden los datos correctamente
+    def aviso():
+        a = messagebox.showinfo('Información', 'Datos guardados correctamente')
+        if a:
+            Tasks_window.destroy()
+
+    #Función que se llama cuando se presiona el botón de guardar tarea
     def guardar_tarea():
         try: 
             nombre = nombre_tarea.get()
@@ -104,26 +114,29 @@ def tasks():
             description_text = descripcion.get(1.0, "end-1c") 
             fecha_entrega = cal.get_date()
 
-            # Ejecuta la sentencia SQL para insertar los datos en la tabla "tareas"
+            # Ejecuta la sentencia SQL para insertar los datos en la tabla "Tareas"
             cur.execute("INSERT INTO Tareas (nombre, descripcion, fecha_entrega, materia_id) VALUES (?, ?, ?, ?)",
                         (nombre, description_text, fecha_entrega, id_materia))
-            
-            conn.commit()  # Realiza el commit para confirmar la inserción
+            conn.commit()
+
             print("[!] Data saved successfully")
-            Tasks_window.destroy()  # Cierra la ventana después de guardar los datos
+            aviso()
             actualizar_listbox()
         
         except mariadb.Error as e:
             print(e)
 
+    #Creación de la ventana
     Tasks_window = Tk()
     Tasks_window.geometry("600x400")
     Tasks_window.title("Agregar Tarea")
 
+    #Entrada para el nombre de la tarea
     Label(Tasks_window, text = 'Nombre de la tarea:').pack()
     nombre_tarea = Entry(Tasks_window)
     nombre_tarea.pack()
 
+    #Entrada para las materias
     Label(Tasks_window, text = 'Materia:').pack()
     query = 'select id, nombre from Materias;'
     cur.execute(query)
@@ -132,49 +145,68 @@ def tasks():
     materia_entry = ttk.Combobox(Tasks_window, values = list(opciones.values()))
     materia_entry.pack()
 
+    #Entrada para añadir una descripción a la tarea
     Label(Tasks_window, text = 'Descripción:').pack()
     descripcion = Text(Tasks_window, height = 1, width = 40)
     descripcion.pack()
 
+    #Calendario para establecer la fecha de entrega
     Label(Tasks_window, text = 'Fecha de entrega:').pack()
     cal = Calendar(Tasks_window, selectmode = 'day', day = 12, month = 12, year = 2023)
     cal.pack()
 
-    # Botón para guardar los datos
-    btn_guardar = Button(Tasks_window, text = 'Guardar', command = guardar_tarea)
-    btn_guardar.pack()
+    #Botón para guardar los datos
+    Button(Tasks_window, text = 'Guardar', command = guardar_tarea, borderwidth = 3, relief = 'solid').pack()
 
-def eliminar_tarea():
-    selecc = main_list.curselection()
-    tarea_id = main_list.get(selecc[0])[0]
-    if selecc:
-        main_list.delete(selecc)
-        cur.execute(f'delete from Tareas where id = {tarea_id}')
-        conn.commit()
-    print(tarea_id)
+#Función para agregar una materia
+def v_materias():
+
+    #Mensaje de éxito en caso de que se guarden los datos correctamente
+    def aviso():
+        a = messagebox.showinfo('Información', 'Datos guardados correctamente')
+        if a:
+            Materias_window.destroy()
+
+    def agregar_materia():
+        try:
+            nombre = nombre_materia.get()
+            profesor = nombre_profesor.get()
+            aula = nombre_aula.get()
+
+            cur.execute('insert into Materias(nombre, profesor, aula) values (?,?,?)',
+                        (nombre, profesor, aula))
+            
+            aviso()
+            print("[!] Data saved successfully")
         
-#Salir del programa
-def exit():
-    exit = messagebox.askyesno("Salir", "¿Salir del programa?")
+        except mariadb.Error as e:
+            print(e)
     
-    if exit: 
-        root.quit()
+    Materias_window = Tk()
+    Materias_window.geometry("300x200")
+    Materias_window.title("Agregar Materia")
+    
+    #Entrada para el nombre de la materia
+    Label(Materias_window, text = 'Nombre de la tarea:').pack()
+    nombre_materia = Entry(Materias_window)
+    nombre_materia.pack()
 
-##################################################################################################################################
+    #Entrada para el nombre del profesor que da la materia
+    Label(Materias_window, text = 'Nombre del profesor:').pack()
+    nombre_profesor = Entry(Materias_window)
+    nombre_profesor.pack()
 
-'''
-Bloque principal; menú y botones
-'''
+    #Entrada para el aula donde se da la materia
+    Label(Materias_window, text = 'Aula: ').pack()
+    nombre_aula = Entry(Materias_window)
+    nombre_aula.pack()
 
-root = Tk()  
-root.geometry("600x400")
-root.title("AGENDA ESCOLAR")
-label = Label(root, text = "¡BIENVENIDO A TU AGENDA ESCOLAR!\n"
-              "Echa un vistazo a tus tareas  pendientes.")
-label.place(x = 175, y = 30)
+    #Botón para guardar los cambios
+    Button(Materias_window, text = 'Guardar', borderwidth = 3, relief = 'solid', command = agregar_materia).pack()
 
+#Función para actualizar la listbox
 def actualizar_listbox():
-    # Realizar la consulta para obtener las tareas
+    #Realizar la consulta para obtener las tareas
     query = 'SELECT t.id, t.nombre AS tarea, m.nombre AS materia, t.fecha_entrega FROM Tareas t LEFT JOIN Materias m ON t.materia_id = m.id;'
     cur.execute(query)
     result = cur.fetchall()
@@ -190,13 +222,49 @@ def actualizar_listbox():
         formato = f'{id_tarea} - {nombre_tarea} - {nombre_materia} - Fecha: {fecha_entrega}'
         main_list.insert(END, formato)
 
-def detalles(event): #TO DO: corregir esta función
+#Función para eliminar una tarea
+def eliminar_tarea():
+    selecc = main_list.curselection()
+    tarea_id = main_list.get(selecc[0])[0]
+    if selecc:
+        main_list.delete(selecc)
+        cur.execute(f'delete from Tareas where id = {tarea_id}')
+        conn.commit()
+    print(f'[!] Task {tarea_id} eliminated successfully')
+        
+#Salir del programa
+def exit():
+    exit = messagebox.askyesno("Salir", "¿Salir del programa?")
+    
+    if exit: 
+        root.quit()
+
+##################################################################################################################################
+
+'''
+Bloque principal; listbox, menú y botones
+'''
+
+root = Tk()  
+root.geometry("600x400")
+root.title("AGENDA ESCOLAR")
+label = Label(root, text = "¡BIENVENIDO A TU AGENDA ESCOLAR!\n"
+              "Echa un vistazo a tus tareas  pendientes.")
+label.place(x = 175, y = 30)
+
+#Ventana emergente que muestra los detalles de una tarea agregada
+def detalles(event):
+    
+    #Se cierra la ventana emergente al presionar el botón "Atrás"
+    def salir_detalles():
+        det.destroy()
+
     det = Toplevel()
     det.title('Detalles')
 
     index = main_list.curselection()[0]
-    id_tarea = main_list.get(index).split('-')[0].strip()
-    cur.execute('select t.nombre, m.nombre, m.profesor, m.aula, t.descripcion, t.fecha_entrega from Tareas t join Materias m on t.materia_id = m.id where id = %s;', (id_tarea))
+    id_tarea = main_list.get(index) #.split('-')[0].strip()
+    cur.execute('select t.nombre, m.nombre, m.profesor, m.aula, t.descripcion, t.fecha_entrega from Tareas t join Materias m on t.materia_id = m.id where t.id = %s;', (id_tarea,))
     result = cur.fetchone()
 
     Label(det, text = f'{result[0]}').pack()
@@ -205,6 +273,7 @@ def detalles(event): #TO DO: corregir esta función
     Label(det, text = f'Aula: {result[3]}').pack()
     Label(det, text = f'Descripción: {result[4]}').pack()
     Label(det, text = f'Fecha tope: {result[5]}').pack()
+    Button(det, text = 'Atrás', borderwidth = 3, relief = 'solid', command = salir_detalles).pack()
 
 main_list = Listbox(root, height = 10, width = 60)
 main_list.place(x = 50, y = 75)
@@ -214,17 +283,21 @@ main_list.bind('<<ListboxSelect>>', detalles)
 btn1 = Button(root, text = "Salir", fg = "black", bg = "white", command = exit, borderwidth = 3, relief = 'solid')
 btn1.place(x = 400, y = 300, width = 100, height = 50)
 
-btn2 = Button(root, text = "Añadir tareas", fg = "white", bg = "purple", command = tasks, borderwidth = 3, relief = 'solid')
-btn2.place(x = 100, y = 300, width = 100, height = 50)
+btn2 = Button(root, text = "Añadir tareas", fg = "white", bg = "purple", command = v_tareas, borderwidth = 3, relief = 'solid')
+btn2.place(x = 100, y = 300, width = 100)
 
 btn3 = Button(root, text = "Eliminar", fg = 'white', bg = 'red', command = eliminar_tarea, borderwidth = 3, relief = "solid")
 btn3.place(x = 250, y = 300, width = 100, height = 50)
 
 btn4 = Button(root, text = 'Actualizar', borderwidth = 3, relief = 'solid', command = actualizar_listbox)
 btn4.pack(side = 'right', anchor = 'sw')
+
+btn5 = Button(root, text = 'Añadir materias', fg = 'white', bg = 'purple', borderwidth = 3, relief = 'solid', command = v_materias)
+btn5.place(x = 82, y = 335)
+
+#Si se presiona la tecla ESC, se llama a esta función
 def keypress_handler(e):
-    #Si se presiona la tecla ESC, se llama a esta función (No sé por qué no funciona :c)
-    if e.keycode == 27:
+    if e.keysym == 'Escape':
         exit()
 
 root.bind('<KeyPress>', keypress_handler)
