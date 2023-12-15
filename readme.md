@@ -1,2 +1,2 @@
 # AGENDA ESCOLAR
-A project for a college agenda, using MariaDB and Python.
+Un projecto para una agenda escolar, utilizando MariaDB y Python
