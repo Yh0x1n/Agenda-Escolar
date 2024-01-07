@@ -22,10 +22,8 @@ Base de datos
 try:
     conn = mariadb.connect(
         user = 'root',
-        password = 'root',
         host = 'localhost',
         port = 3306,
-        database = 'agenda_escolar'
     )
 
     cur = conn.cursor()
@@ -187,7 +185,7 @@ def v_materias():
     Materias_window.title("Agregar Materia")
     
     #Entrada para el nombre de la materia
-    Label(Materias_window, text = 'Nombre de la tarea:').pack()
+    Label(Materias_window, text = 'Nombre de la materia:').pack()
     nombre_materia = Entry(Materias_window)
     nombre_materia.pack()
 
