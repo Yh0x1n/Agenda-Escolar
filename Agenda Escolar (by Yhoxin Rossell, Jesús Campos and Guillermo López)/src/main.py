@@ -10,7 +10,7 @@ from tkinter import ttk
 from tkinter import filedialog as FileDialog
 from tkcalendar import *
 from datetime import *
-import mariadb
+import mariadb # type: ignore
 import sys
 
 route = ''

@@ -1,4 +1,4 @@
-#!/home/yh0xr/Agenda-Escolar/env/bin/python
+#!/home/yh0xr/Documentos/Repos/Agenda-Escolar/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
