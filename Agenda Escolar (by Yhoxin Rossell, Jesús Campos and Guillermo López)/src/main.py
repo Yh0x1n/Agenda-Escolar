@@ -4,13 +4,13 @@
 '''
 IMPORTACIONES
 '''
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog as FileDialog
 from tkcalendar import *
 from datetime import *
-import mariadb # type: ignore
+import mariadb
 import sys
 
 route = ''
@@ -126,18 +126,18 @@ def v_tareas():
             print(e)
 
     #Creación de la ventana
-    Tasks_window = Tk()
+    Tasks_window = tk.Tk()
     Tasks_window.geometry("600x400")
     Tasks_window.title("Agregar Tarea")
     Tasks_window.config(bg = "light gray")
 
     #Entrada para el nombre de la tarea
-    Label(Tasks_window, text = 'Nombre de la tarea:', font = "Roboto").pack()
-    nombre_tarea = Entry(Tasks_window)
+    tk.Label(Tasks_window, text = 'Nombre de la tarea:', font = "Roboto").pack()
+    nombre_tarea = tk.Entry(Tasks_window)
     nombre_tarea.pack()
 
     #Entrada para las materias
-    Label(Tasks_window, text = 'Materia:', font = "Roboto").pack()
+    tk.Label(Tasks_window, text = 'Materia:', font = "Roboto").pack()
     query = 'select id, nombre from Materias;'
     cur.execute(query)
     result = cur.fetchall()
@@ -146,17 +146,17 @@ def v_tareas():
     materia_entry.pack()
 
     #Entrada para añadir una descripción a la tarea
-    Label(Tasks_window, text = 'Descripción:', font = "Roboto").pack()
-    descripcion = Text(Tasks_window, height = 1, width = 40)
+    tk.Label(Tasks_window, text = 'Descripción:', font = "Roboto").pack()
+    descripcion = tk.Text(Tasks_window, height = 1, width = 40)
     descripcion.pack()
 
     #Calendario para establecer la fecha de entrega
-    Label(Tasks_window, text = 'Fecha de entrega:', font = "Roboto").pack()
+    tk.Label(Tasks_window, text = 'Fecha de entrega:', font = "Roboto").pack()
     cal = Calendar(Tasks_window, selectmode = 'day', day = 12, month = 12, year = 2023)
     cal.pack()
 
     #Botón para guardar los datos
-    Button(Tasks_window, text = 'Guardar', command = guardar_tarea, borderwidth = 3, relief = 'solid', font = "Roboto").pack()
+    tk.Button(Tasks_window, text = 'Guardar', command = guardar_tarea, borderwidth = 3, relief = 'solid', font = "Roboto").pack()
 
 #Función para agregar una materia
 def v_materias():
@@ -182,28 +182,28 @@ def v_materias():
         except mariadb.Error as e:
             print(e)
     
-    Materias_window = Tk()
+    Materias_window = tk.Tk()
     Materias_window.geometry("300x200")
     Materias_window.title("Agregar Materia")
     Materias_window.config(bg  = "light gray")
     
     #Entrada para el nombre de la materia
-    Label(Materias_window, text = 'Nombre de la materia:', font = "Roboto").pack()
-    nombre_materia = Entry(Materias_window)
+    tk.Label(Materias_window, text = 'Nombre de la materia:', font = "Roboto").pack()
+    nombre_materia = tk.Entry(Materias_window)
     nombre_materia.pack()
 
     #Entrada para el nombre del profesor que da la materia
-    Label(Materias_window, text = 'Nombre del profesor:', font = "Roboto").pack()
-    nombre_profesor = Entry(Materias_window)
+    tk.Label(Materias_window, text = 'Nombre del profesor:', font = "Roboto").pack()
+    nombre_profesor = tk.Entry(Materias_window)
     nombre_profesor.pack()
 
     #Entrada para el aula donde se da la materia
-    Label(Materias_window, text = 'Aula: ', font = "Roboto").pack()
-    nombre_aula = Entry(Materias_window)
+    tk.Label(Materias_window, text = 'Aula: ', font = "Roboto").pack()
+    nombre_aula = tk.Entry(Materias_window)
     nombre_aula.pack()
 
     #Botón para guardar los cambios
-    Button(Materias_window, text = 'Guardar', borderwidth = 3, relief = 'solid', command = agregar_materia, font = "Roboto").pack()
+    tk.Button(Materias_window, text = 'Guardar', borderwidth = 3, relief = 'solid', command = agregar_materia, font = "Roboto").pack()
 
 #Función para actualizar la listbox
 def actualizar_listbox():
@@ -212,14 +212,14 @@ def actualizar_listbox():
     cur.execute(query)
     result = cur.fetchall()
 
-    main_list.delete(0, END)
+    main_list.delete(0, tk.END)
 
     for tarea in result:
         id_tarea = tarea[0]
         nombre_tarea = tarea[1]
         nombre_materia = tarea[2]
         formato = f'{id_tarea} - {nombre_tarea} - {nombre_materia}'
-        main_list.insert(END, formato)
+        main_list.insert(tk.END, formato)
 
 #Función para eliminar una tarea
 def eliminar_tarea():
@@ -244,10 +244,10 @@ def exit():
 Bloque principal; listbox, menú y botones
 '''
 
-root = Tk()  
+root = tk.Tk()  
 root.geometry("600x400")
 root.title("AGENDA ESCOLAR")
-label = Label(root, text = "¡BIENVENIDO A TU AGENDA ESCOLAR!\n"
+label = tk.Label(root, text = "¡BIENVENIDO A TU AGENDA ESCOLAR!\n"
               "Echa un vistazo a tus tareas pendientes.", bg = "light blue",
               font = ("Roboto", 12))
 label.place(x = 150, y = 30)
@@ -260,7 +260,7 @@ def detalles(event):
     def salir_detalles():
         det.destroy()
 
-    det = Toplevel()
+    det = tk.Toplevel()
     det.title('Detalles')
 
     index = main_list.curselection()[0]
@@ -268,33 +268,33 @@ def detalles(event):
     cur.execute('select t.nombre, m.nombre, m.profesor, m.aula, t.descripcion, t.fecha_entrega from Tareas t join Materias m on t.materia_id = m.id where t.id = %s;', (id_tarea,))
     result = cur.fetchone()
 
-    Label(det, text = f'{result[0]}', font = "Roboto").pack()
-    Label(det, text = f'Materia: {result[1]}', font = "Roboto").pack()
-    Label(det, text = f'Profesor: {result[2]}', font = "Roboto").pack()
-    Label(det, text = f'Aula: {result[3]}', font = "Roboto").pack()
-    Label(det, text = f'Descripción: {result[4]}', font = "Roboto").pack()
-    Label(det, text = f'Fecha tope: {result[5]}', font = "Roboto").pack()
-    Button(det, text = 'Atrás', font = "Roboto", borderwidth = 3, relief = 'solid', command = salir_detalles).pack()
+    tk.Label(det, text = f'{result[0]}', font = "Roboto").pack()
+    tk.Label(det, text = f'Materia: {result[1]}', font = "Roboto").pack()
+    tk.Label(det, text = f'Profesor: {result[2]}', font = "Roboto").pack()
+    tk.Label(det, text = f'Aula: {result[3]}', font = "Roboto").pack()
+    tk.Label(det, text = f'Descripción: {result[4]}', font = "Roboto").pack()
+    tk.Label(det, text = f'Fecha tope: {result[5]}', font = "Roboto").pack()
+    tk.Button(det, text = 'Atrás', font = "Roboto", borderwidth = 3, relief = 'solid', command = salir_detalles).pack()
 
-main_list = Listbox(root, height = 10, width = 50, borderwidth = 3, relief = "solid")
+main_list = tk.Listbox(root, height = 10, width = 50, borderwidth = 3, relief = "solid")
 main_list.config(font = ("Roboto", 12))
 main_list.place(x = 85, y = 75)
 main_list.bind('<Double-Button-1>', detalles)
 
 #Botones
-btn1 = Button(root, text = "Salir", fg = "black", bg = "white", command = exit, borderwidth = 3, relief = 'solid', font = "Roboto")
+btn1 = tk.Button(root, text = "Salir", fg = "black", bg = "white", command = exit, borderwidth = 3, relief = 'solid', font = "Roboto")
 btn1.place(x = 400, y = 300, width = 100, height = 50)
 
-btn2 = Button(root, text = "Añadir tareas", fg = "white", bg = "purple", command = v_tareas, borderwidth = 3, relief = 'solid', font = "Roboto")
+btn2 = tk.Button(root, text = "Añadir tareas", fg = "white", bg = "purple", command = v_tareas, borderwidth = 3, relief = 'solid', font = "Roboto")
 btn2.place(x = 82, y = 300, width = 145)
 
-btn3 = Button(root, text = "Eliminar", fg = 'white', bg = 'red', command = eliminar_tarea, borderwidth = 3, relief = "solid",  font = "Roboto")
+btn3 = tk.Button(root, text = "Eliminar", fg = 'white', bg = 'red', command = eliminar_tarea, borderwidth = 3, relief = "solid",  font = "Roboto")
 btn3.place(x = 250, y = 300, width = 100, height = 50)
 
-btn4 = Button(root, text = 'Actualizar', borderwidth = 3, relief = 'solid', command = actualizar_listbox, font = "Roboto")
+btn4 = tk.Button(root, text = 'Actualizar', borderwidth = 3, relief = 'solid', command = actualizar_listbox, font = "Roboto")
 btn4.pack(side = 'right', anchor = 'sw')
 
-btn5 = Button(root, text = 'Añadir materias', fg = 'white', bg = 'purple', borderwidth = 3, relief = 'solid', command = v_materias, font = "Roboto")
+btn5 = tk.Button(root, text = 'Añadir materias', fg = 'white', bg = 'purple', borderwidth = 3, relief = 'solid', command = v_materias, font = "Roboto")
 btn5.place(x = 82, y = 335)
 
 #Si se presiona la tecla ESC, se llama a esta función
